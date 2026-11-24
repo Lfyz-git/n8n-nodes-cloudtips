@@ -1,6 +1,9 @@
 name: Publish to npm
 on:
   workflow_dispatch:
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
 permissions:
   contents: read
   id-token: write
@@ -19,4 +22,5 @@ jobs:
           package-manager-cache: false
       - run: npm ci --ignore-scripts
       - run: npm test
-      - run: npm publish --access public
+      - run: npm pack --dry-run
+      - run: npm publish --access public --registry=https://registry.npmjs.org/
